@@ -1,0 +1,22 @@
+{
+  "name": "inventory-tracker",
+  "version": "1.0.0",
+  "description": "ITGS project.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KLZX121/inventory-tracker.git"
+  },
+  "author": "KLZX121",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/KLZX121/inventory-tracker/issues"
+  },
+  "homepage": "https://github.com/KLZX121/inventory-tracker#readme",
+  "devDependencies": {
+    "electron": "^13.1.9"
+  }
+}
