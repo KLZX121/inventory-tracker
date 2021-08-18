@@ -1,6 +1,7 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
 
+//remove the default menu for electron apps
 Menu.setApplicationMenu(null);
 
 function bootApp(){
