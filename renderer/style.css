@@ -1,0 +1,7 @@
+.homeButton {
+    display: block;
+}
+#appVersion {
+    position: absolute;
+    bottom: 0;
+}

@@ -1,4 +1,5 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const path = require('path');
 
 Menu.setApplicationMenu(null);
 
@@ -8,13 +9,17 @@ function bootApp(){
         height: 600,
         title: 'Inventory Tracker',
         webPreferences: {
-            nodeIntegration: true
+            preload: path.join(__dirname, './renderer/preload.js')
         }
     });
 
     win.loadFile('./renderer/index.html');
     win.webContents.openDevTools();
 }
+
+ipcMain.handle('getVersion', () => {
+    return app.getVersion();
+});
 
 app.whenReady().then(bootApp);
 
