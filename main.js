@@ -6,6 +6,7 @@ Menu.setApplicationMenu(null);
 
 function bootApp(){
     const win = new BrowserWindow({
+        useContentSize: true,
         width: 800,
         height: 600,
         title: 'Inventory Tracker',

@@ -2,15 +2,35 @@
     font-family: 'Open Sans';
     src: url('../fonts/OpenSans.ttf');
 }
-
+html {
+    height: 100%;
+}
 body {
+    height: 98%;
     font-family: 'Open Sans', sans-serif;
 }
-
+#homeContainer {
+    display: grid;
+    grid-template-rows: 15% 70% 15%;
+}
+#homepageMenu {
+    grid-row: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.pageTitle {
+    grid-row: 1;
+    text-align: center;
+}
 .menuButton {
-    display: block;
+    margin: 0.2em;
+    font-size: 1.5em;
+    width: 8em;
+    height: 2em;
 }
 #appVersion {
-    position: absolute;
-    bottom: 0;
+    grid-row: 3;
+    align-self: end;
 }
