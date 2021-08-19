@@ -1,0 +1,16 @@
+@font-face {
+    font-family: 'Open Sans';
+    src: url('../fonts/OpenSans.ttf');
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.menuButton {
+    display: block;
+}
+#appVersion {
+    position: absolute;
+    bottom: 0;
+}

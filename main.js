@@ -10,11 +10,11 @@ function bootApp(){
         height: 600,
         title: 'Inventory Tracker',
         webPreferences: {
-            preload: path.join(__dirname, './renderer/preload.js')
+            preload: path.join(__dirname, './renderer/js/preload.js')
         }
     });
 
-    win.loadFile('./renderer/index.html');
+    win.loadFile('./renderer/html/index.html');
     win.webContents.openDevTools();
 }
 
