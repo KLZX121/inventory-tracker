@@ -6,8 +6,19 @@
 </head>
 <body>
     <button onclick="window.location.href = './index.html'">Home</button>
+    <button onclick="window.location.href = './databases.html'" style="display: none;" id="backToDatabasesBtn">Databases</button>
     <h1 class="pageTitle">Databases</h1>
 
-    
+    <section id="databaseListContainer">
+        <input type="text" placeholder="Database name" id="dbName">
+        <button id="newDatabaseBtn">New Database</button>
+        <div id="databaseList">
+            
+        </div>
+    </section>
+    <section id="databaseContainer" style="display: none;">
+        
+    </section>
+    <script src="../js/databases.js"></script>
 </body>
 </html>
