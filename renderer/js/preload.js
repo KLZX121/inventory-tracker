@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 const Database = require('better-sqlite3');
+const fs = require('fs');
 
 contextBridge.exposeInMainWorld(
     //allows renderer process (index.js) to access electron api through window.app
@@ -32,14 +33,13 @@ contextBridge.exposeInMainWorld(
         }
     }
 );
-
 contextBridge.exposeInMainWorld(
     //allow renderer process to use sqlite3 package
     'db',
     {
         db: null,
         openDb: name => {
-            this.db = new Database(name)
+            this.db = new Database(`./renderer/databases/db_${name}`);
         },
         initialise: () => {
             const stmt = this.db.prepare(`CREATE TABLE items (
@@ -61,6 +61,18 @@ contextBridge.exposeInMainWorld(
 
             const data = stmt.all();
             return data;
+        }
+    }
+);
+contextBridge.exposeInMainWorld(
+    //allow renderer process to use fs
+    'fs',
+    {
+        readdir: (path, options, callback) => {
+            ipcRenderer.send('fs', {type:'readdir', path, options, callback});
+        },
+        unlink: (path, callback) => {
+            fs.unlink(path, callback);
         }
     }
 );

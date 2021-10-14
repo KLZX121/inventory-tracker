@@ -11,7 +11,10 @@ function refreshDbList(){
 }
 function deleteDb(database) {
     store.delete(database);
-    setTimeout(refreshDbList, 100);
+    fs.unlink(`./renderer/databases/db_${database}`, error => {
+        if (error) console.error(error);
+        refreshDbList();
+    });
 }
 
 const newDatabaseBtn = document.getElementById('newDatabaseBtn');

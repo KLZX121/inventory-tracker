@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
 
 const Store = require('electron-store');
 const store = new Store();
@@ -28,7 +29,6 @@ function bootApp(){
     ipcMain.on('store', (event, obj) => {
         switch (obj.type){
             case 'set':
-                console.log(obj.obj);
                 store.set(obj.obj);
                 break;
             case 'clearAll':
@@ -42,6 +42,13 @@ function bootApp(){
                 break;
             case 'getAll':
                 event.returnValue = store.store;
+                break;
+        }
+    });
+    ipcMain.on('fs', (event, obj) => {
+        switch (obj.type){
+            case 'readdir':
+                fs.readdir(obj.path, obj.options, obj.callback);
                 break;
         }
     })
