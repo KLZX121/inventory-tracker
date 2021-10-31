@@ -5,20 +5,17 @@
     <link rel="stylesheet" href="../css/databases.css">
 </head>
 <body>
-    <button onclick="window.location.href = './index.html'">Home</button>
-    <button onclick="window.location.href = './databases.html'" style="display: none;" id="backToDatabasesBtn">Databases</button>
+    <button onclick="window.location.href = './home.html'">Home</button>
     <h1 class="pageTitle">Databases</h1>
 
-    <section id="databaseListContainer">
+    <section class="container">
         <input type="text" placeholder="Database name" id="dbName" spellcheck="false">
         <button id="newDatabaseBtn">New Database</button>
-        <div id="databaseList">
+        <div id="databaseList" class="list">
             
         </div>
     </section>
-    <section id="databaseContainer" style="display: none;">
-        
-    </section>
+    
     <script src="../js/databases.js"></script>
 </body>
 </html>

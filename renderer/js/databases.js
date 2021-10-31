@@ -6,7 +6,14 @@ function refreshDbList(){
     const databases = store.getAll();
 
     for (const database in databases) {
-        databaseList.innerHTML += `<div class="database"><strong>${database}</strong> - <em>${databases[database].type}</em><button class="viewDbBtn" onclick="openDb(\`${database}\`)">View</button><button class="deleteDbBtn" onclick="deleteDb(\`${database}\`)">Delete</button></div>`
+        databaseList.innerHTML += `
+            <div class="listItem">
+                <strong>${database}</strong> - 
+                <em>${databases[database].type}</em>
+                <button class="actionBtn" onclick="location.href = \`../html/items.html?db=${database}\`">View</button>
+                <button class="actionBtn" onclick="deleteDb(\`${database}\`)">Delete</button>
+            </div>
+        `
     }
 }
 function deleteDb(database) {
@@ -34,24 +41,4 @@ function newDb(){
     dbName.value = '';
 
     refreshDbList();
-}
-function openDb(databaseName){
-    backToDatabasesBtn.style.display = 'inline-block';
-    databaseListContainer.style.display = 'none';
-    databaseContainer.style.display = 'block';
-
-    document.querySelector('.pageTitle').innerText = databaseName;
-
-    const dbInfo = store.get(databaseName);
-    db.openDb(databaseName);
-    
-    if (dbInfo.new) {
-        db.initialise();
-        dbInfo.new = false;
-        const obj = {};
-        obj[databaseName] = dbInfo;
-        store.set(obj);
-    }
-    
-    //setTimeout(() => console.log('get all: ', db.getAll()), 3000)
 }

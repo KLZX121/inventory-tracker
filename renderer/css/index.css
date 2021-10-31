@@ -34,3 +34,26 @@ body {
     grid-row: 3;
     align-self: end;
 }
+
+.container {
+    margin: 3em;
+    border: 2px black solid;
+    height: 70%;
+    padding: 1em;
+    overflow: auto;
+}
+.list {
+    margin-top: 1em;
+    border-top: 1px solid black;
+}
+.listItem {
+    padding: 1em;
+    border-bottom: solid 1px lightgrey;
+}
+.listItem:last-child {
+    border-bottom: 1px solid black;
+}
+
+.actionBtn {
+    float: right;
+}

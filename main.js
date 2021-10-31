@@ -13,7 +13,7 @@ function bootApp(){
     const win = new BrowserWindow({
         useContentSize: true,
         width: 800,
-        height: 600,
+        height: 800,
         show: false,
         title: 'Inventory Tracker',
         webPreferences: {
@@ -21,7 +21,7 @@ function bootApp(){
         }
     });
 
-    win.loadFile('./renderer/html/index.html');
+    win.loadFile('./renderer/html/home.html');
 
     win.on('ready-to-show', () => win.show());
     win.webContents.openDevTools();

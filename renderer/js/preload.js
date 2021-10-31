@@ -42,12 +42,14 @@ contextBridge.exposeInMainWorld(
             this.db = new Database(`./renderer/databases/db_${name}`);
         },
         initialise: () => {
-            const stmt = this.db.prepare(`CREATE TABLE items (
-                ItemID INTEGER PRIMARY KEY AUTOINCREMENT,
-                ItemName TEXT UNIQUE NOT NULL,
-                ItemDescription TEXT,
-                ItemQuantity INTEGER
-            )`);
+            const stmt = this.db.prepare(`
+                CREATE TABLE items (
+                    ItemID INTEGER PRIMARY KEY,
+                    ItemName TEXT UNIQUE NOT NULL,
+                    ItemDescription TEXT,
+                    ItemQuantity INTEGER
+                )
+            `);
 
             const info = stmt.run();
             return info;
@@ -61,6 +63,24 @@ contextBridge.exposeInMainWorld(
 
             const data = stmt.all();
             return data;
+        },
+        insert: values => {
+            const stmt = this.db.prepare(`
+                INSERT INTO items
+                VALUES (NULL, '${values.itemName}', '${values.itemDescription}', ${values.itemQuantity})
+            `);
+
+            const info = stmt.run();
+            return info;
+        },
+        deleteItem: itemId => {
+            const stmt = this.db.prepare(`
+                DELETE FROM items
+                WHERE ItemID = ${itemId}
+            `);
+
+            const info = stmt.run();
+            return info;
         }
     }
 );
