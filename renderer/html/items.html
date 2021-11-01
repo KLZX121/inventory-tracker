@@ -13,10 +13,29 @@
     <section class="container">
         <input type="text" id="itemSearch" placeholder="Search items">
         <button id="itemSearchBtn">Search</button>
-        <button id="addNewItemBtn">New item</button>
+    <button id="newItemBtn" onclick="newItemContainer.style.display = 'flex';">New item</button>
 
         <div id="itemList" class="list">
 
+        </div>
+    </section>
+
+    <section id="newItemContainer" style="display: none;">
+        <div id="newItemDiv">
+            <h3 style="text-align: center;">New Item</h3>
+
+            <div>
+                <label for="itemNameInput">Item Name:</label>
+                <input type="text" id="itemNameInput">
+
+                <label for="itemDescription">Item Description:</label>
+                <textarea id="itemDescription" cols="20" rows="3" placeholder="Optional"></textarea>
+
+                <label for="itemQuantity">Item Quantity:</label>
+                <input type="number" id="itemQuantity" value="0">
+            </div>
+
+            <button id="addItemBtn">Add Item</button>
         </div>
     </section>
 

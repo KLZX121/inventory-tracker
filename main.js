@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron');
+const { app, BrowserWindow, Menu, ipcMain, dialog } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
@@ -51,7 +51,14 @@ function bootApp(){
                 fs.readdir(obj.path, obj.options, obj.callback);
                 break;
         }
-    })
+    });
+    ipcMain.on('dialog', (event, obj) => {
+        switch (obj.type){
+            case 'showMessageBox':
+                dialog.showMessageBox(obj.options);
+                break;
+        }
+    });
 }
 
 ipcMain.handle('getVersion', () => {

@@ -1,0 +1,35 @@
+#newItemContainer {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+}
+
+#newItemDiv {
+    width: 30em;
+    height: auto;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 1em;
+    border-radius: 0.3em;
+    font-size: 0.9em;
+    text-align: center;
+}
+#newItemDiv > div {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    text-align: left;
+}
+
+#newItemDiv > div * {
+    margin-top: 1em;
+}
+
+#addItemBtn {
+    margin-top: 2em;
+}

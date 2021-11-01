@@ -9,6 +9,10 @@ body {
     height: 98%;
     font-family: 'Open Sans', sans-serif;
 }
+textarea {
+    font-family: 'Open Sans', sans-serif;
+    resize: none;
+}
 #homeContainer {
     display: grid;
     grid-template-rows: 15% 70% 15%;

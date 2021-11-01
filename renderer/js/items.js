@@ -1,7 +1,12 @@
 const g = document.getElementById.bind(document);
 
-const addNewItemBtn = g('addNewItemBtn'),
-    itemList = g('itemList');
+const newItemBtn = g('newItemBtn'),
+    itemList = g('itemList'),
+    newItemContainer = g('newItemContainer'),
+    addItemBtn = g('addItemBtn'),
+    itemNameInput = g('itemNameInput'),
+    itemDescription = g('itemDescription'),
+    itemQuantity = g('itemQuantity');
 
 const databaseName = new URLSearchParams(location.search).get('db');
 document.querySelector('.pageTitle').innerText = databaseName;
@@ -17,16 +22,26 @@ if (dbInfo.new) {
     store.set(obj);
 }
 
-addNewItemBtn.addEventListener('click', addNewItem);
+newItemContainer.addEventListener('click', event => {
+    if (event.target === newItemContainer) newItemContainer.style.display = 'none';
+});
+addItemBtn.addEventListener('click', addNewItem);
 
 function addNewItem(){
-
+    if (!itemNameInput.value.trim() || !itemQuantity.value) {
+        dialog.showMessageBox({message: 'Please fill in all required fields', type: 'error', title: 'Error'})
+        return;
+    }
+    newItemContainer.style.display = 'none';
     db.insert({
-        itemName: Math.random(),
-        itemDescription: 'Test',
-        itemQuantity: 1
-    })
+        itemName: itemNameInput.value,
+        itemDescription: itemDescription.value,
+        itemQuantity: itemQuantity.value
+    });
 
+    itemNameInput.value = '';
+    itemDescription.value = '';
+    itemQuantity.value = 0;
     refreshItemList();
 }
 

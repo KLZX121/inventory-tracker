@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld(
     }
 );
 contextBridge.exposeInMainWorld(
-    //allows renderer process to access electron-store api
+    //expose electron-store api
     'store',
     {
         set: obj => {
@@ -34,7 +34,7 @@ contextBridge.exposeInMainWorld(
     }
 );
 contextBridge.exposeInMainWorld(
-    //allow renderer process to use sqlite3 package
+    //expose sqlite3 package
     'db',
     {
         db: null,
@@ -85,7 +85,7 @@ contextBridge.exposeInMainWorld(
     }
 );
 contextBridge.exposeInMainWorld(
-    //allow renderer process to use fs
+    //expose fs
     'fs',
     {
         readdir: (path, options, callback) => {
@@ -96,4 +96,12 @@ contextBridge.exposeInMainWorld(
         }
     }
 );
-
+contextBridge.exposeInMainWorld(
+    //expose electron dialog
+    'dialog',
+    {
+        showMessageBox: options => {
+            ipcRenderer.send('dialog', {type: 'showMessageBox', options});
+        }
+    }
+);
