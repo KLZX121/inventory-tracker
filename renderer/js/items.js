@@ -13,7 +13,9 @@ const newItemBtn = g('newItemBtn'),
     editItemDescription = g('editItemDescription'),
     editItemQuantity = g('editItemQuantity'),
     saveItemBtn = g('saveItemBtn'),
-    itemIdDisplay = g('itemIdDisplay');
+    itemIdDisplay = g('itemIdDisplay'),
+    itemSearch = g('itemSearch'),
+    itemSearchBtn = g('itemSearchBtn');
 
 //get database name from data sent by databases page
 const databaseName = new URLSearchParams(location.search).get('db');
@@ -109,28 +111,46 @@ function openItem(event, itemId){
     editItemName.focus();
 }
 
+//search items
+itemSearchBtn.addEventListener('click', searchItems);
+itemSearch.addEventListener('keydown', event => {
+    if (event.code === 'Enter') searchItems();
+});
+itemSearch.addEventListener('input', () => {
+    if (!itemSearch.value) refreshItemList();
+});
+function searchItems() {
+    const searchTerm = itemSearch.value.trim().toLowerCase();
+    const data = db.getAll();
+    itemList.innerHTML = '';
+
+    data.forEach(item => {
+        if (item.ItemName.toLowerCase().includes(searchTerm)) createItemList(item);
+    });
+}
+
 refreshItemList();
 function refreshItemList() {
     const data = db.getAll();
     itemList.innerHTML = '';
 
-    data.forEach(item => {
-        itemList.innerHTML += ` 
-            <div class="listItem" onclick="openItem(event, ${item.ItemID})">
-                <span>${item.ItemID}</span> | 
-                <strong>${item.ItemName}</strong>
-                <button class="actionBtn" onclick="deleteItem('${item.ItemID}')">Delete</button>
-                <div>
-                    <em style="font-size: 0.9em">${item.ItemDescription}</em> 
-                    <span style="float: right; font-size: 0.9em; margin-top: 0.1em">Quantity: ${item.ItemQuantity}</span>
-                </div>
-            </div>
-        `;
-        const description = document.querySelector(`[onclick="openItem(event, ${item.ItemID})"] em`);
-        if (description.offsetWidth > 450) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * 450))}...`;
-    });
+    data.forEach(createItemList);
 }
-
+function createItemList(item){
+    itemList.innerHTML += ` 
+        <div class="listItem" onclick="openItem(event, ${item.ItemID})">
+            <span>${item.ItemID}</span> | 
+            <strong>${item.ItemName}</strong>
+            <button class="actionBtn" onclick="deleteItem('${item.ItemID}')">Delete</button>
+            <div>
+                <em style="font-size: 0.9em">${item.ItemDescription}</em> 
+                <span style="float: right; font-size: 0.9em; margin-top: 0.1em">Quantity: ${item.ItemQuantity}</span>
+            </div>
+        </div>
+    `;
+    const description = document.querySelector(`[onclick="openItem(event, ${item.ItemID})"] em`);
+    if (description.offsetWidth > 450) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * 450))}...`;
+}
 function deleteItem(itemId){
     db.deleteItem(itemId);
     refreshItemList();
