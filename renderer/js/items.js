@@ -77,6 +77,8 @@ function refreshItemList() {
                 </div>
             </div>
         `;
+        const description = document.querySelector(`[onclick="openItem(event, ${item.ItemID})"] em`);
+        if (description.offsetWidth > 450) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * 450))}...`;
     });
 }
 
