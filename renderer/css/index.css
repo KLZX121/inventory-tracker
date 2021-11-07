@@ -13,6 +13,9 @@ textarea {
     font-family: 'Open Sans', sans-serif;
     resize: none;
 }
+button {
+    cursor: pointer;
+}
 #homeContainer {
     display: grid;
     grid-template-rows: 15% 70% 15%;
@@ -56,6 +59,10 @@ textarea {
 }
 .listItem:last-child {
     border-bottom: 1px solid black;
+}
+.listItem:hover {
+    background-color: lightgrey;
+    cursor: pointer;
 }
 
 .actionBtn {

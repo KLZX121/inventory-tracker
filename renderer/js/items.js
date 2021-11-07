@@ -73,7 +73,7 @@ function refreshItemList() {
                 <button class="actionBtn" onclick="deleteItem('${item.ItemID}')">Delete</button>
                 <div>
                     <em>${item.ItemDescription || "&nbsp"}</em> 
-                    <span style="float: right">Quantity: ${item.ItemQuantity}</span>
+                    <span style="float: right; font-size: 0.9em; margin-top: 0.1em">Quantity: ${item.ItemQuantity}</span>
                 </div>
             </div>
         `;
