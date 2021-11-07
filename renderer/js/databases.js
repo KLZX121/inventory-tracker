@@ -7,7 +7,7 @@ function refreshDbList(){
 
     for (const database in databases) {
         databaseList.innerHTML += `
-            <div class="listItem" onclick="openDb(event, this, '${database}')">
+            <div class="listItem" onclick="openDb(event, '${database}')">
                 <strong>${database}</strong> 
                 <button class="actionBtn" onclick="deleteDb(\`${database}\`)">Delete</button>
                 <div>${databases[database].type}</div>
@@ -16,8 +16,8 @@ function refreshDbList(){
     }
 }
 
-function openDb(event, element, database){
-    if (event.target === element) location.href = `../html/items.html?db=${database}`;
+function openDb(event, database){
+    if (event.target.tagName !== 'BUTTON') location.href = `../html/items.html?db=${database}`;
 }
 
 function deleteDb(database) {

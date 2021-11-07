@@ -44,7 +44,7 @@ contextBridge.exposeInMainWorld(
         initialise: () => {
             const stmt = this.db.prepare(`
                 CREATE TABLE items (
-                    ItemID INTEGER PRIMARY KEY,
+                    ItemID INTEGER PRIMARY KEY AUTOINCREMENT,
                     ItemName TEXT UNIQUE NOT NULL,
                     ItemDescription TEXT,
                     ItemQuantity INTEGER
@@ -58,6 +58,15 @@ contextBridge.exposeInMainWorld(
             this.db.close();
             this.db = null;
         },
+        get: itemId => {
+            const stmt = this.db.prepare(`
+                SELECT * FROM items
+                WHERE ItemID = ${itemId}
+            `);
+
+            const data = stmt.get();
+            return data;
+        },
         getAll: () => {
             const stmt = this.db.prepare('SELECT * FROM items');
 
@@ -68,6 +77,18 @@ contextBridge.exposeInMainWorld(
             const stmt = this.db.prepare(`
                 INSERT INTO items
                 VALUES (NULL, '${values.itemName}', '${values.itemDescription}', ${values.itemQuantity})
+            `);
+
+            const info = stmt.run();
+            return info;
+        },
+        update: item => {
+            const stmt = this.db.prepare(`
+                UPDATE items
+                SET ItemName = '${item.itemName}',
+                    ItemDescription = '${item.itemDescription}',
+                    ItemQuantity = ${item.itemQuantity}
+                WHERE ItemID = ${item.itemId}
             `);
 
             const info = stmt.run();

@@ -6,7 +6,14 @@ const newItemBtn = g('newItemBtn'),
     addItemBtn = g('addItemBtn'),
     itemNameInput = g('itemNameInput'),
     itemDescription = g('itemDescription'),
-    itemQuantity = g('itemQuantity');
+    itemQuantity = g('itemQuantity'),
+    editItemContainer = g('editItemContainer'),
+    itemName = g('itemName'),
+    editItemName = g('editItemName'),
+    editItemDescription = g('editItemDescription'),
+    editItemQuantity = g('editItemQuantity'),
+    saveItemBtn = g('saveItemBtn'),
+    itemIdDisplay = g('itemIdDisplay');
 
 //get database name from data sent by databases page
 const databaseName = new URLSearchParams(location.search).get('db');
@@ -24,11 +31,11 @@ if (dbInfo.new) {
     store.set(obj);
 }
 
+//functions for adding new item
 newItemBtn.addEventListener('click', () => {
     newItemContainer.style.display = 'flex';
     itemNameInput.focus();
 });
-
 newItemContainer.addEventListener('keydown', event => {
     if (event.code === 'Enter') addNewItem();
 });
@@ -60,6 +67,48 @@ function addNewItem(){
     refreshItemList();
 }
 
+//functions for editing item
+editItemContainer.addEventListener('click', event => {
+    if (event.target === editItemContainer) editItemContainer.style.display = 'none';
+});
+editItemContainer.addEventListener('keydown', event => {
+    if (event.code === 'Enter') editItem();
+});
+saveItemBtn.addEventListener('click', editItem);
+function editItem(){
+    if (!editItemName.value.trim() || !editItemQuantity.value) {
+        dialog.showMessageBox({message: 'Please fill in all required fields', type: 'error', title: 'Error'});
+        return;
+    }
+    try {
+        db.update({
+            itemId: parseInt(itemIdDisplay.value),
+            itemName: editItemName.value,
+            itemDescription: editItemDescription.value,
+            itemQuantity: parseInt(editItemQuantity.value)
+        });
+    } catch (e) {
+        dialog.showMessageBox({message: e.toString(), type: 'error', title: 'Error'});
+        return;
+    }
+    editItemContainer.style.display = 'none';
+
+    refreshItemList();
+}
+function openItem(event, itemId){
+    if (event.target.tagName === 'BUTTON') return;
+    editItemContainer.style.display = 'flex';
+
+    const itemData = db.get(itemId);
+    
+    itemIdDisplay.value = itemId;
+    editItemName.value = itemData.ItemName;
+    editItemDescription.value = itemData.ItemDescription;
+    editItemQuantity.value = itemData.ItemQuantity;
+
+    editItemName.focus();
+}
+
 refreshItemList();
 function refreshItemList() {
     const data = db.getAll();
@@ -67,12 +116,12 @@ function refreshItemList() {
 
     data.forEach(item => {
         itemList.innerHTML += ` 
-            <div class="listItem">
+            <div class="listItem" onclick="openItem(event, ${item.ItemID})">
                 <span>${item.ItemID}</span> | 
                 <strong>${item.ItemName}</strong>
                 <button class="actionBtn" onclick="deleteItem('${item.ItemID}')">Delete</button>
                 <div>
-                    <em>${item.ItemDescription || "&nbsp"}</em> 
+                    <em style="font-size: 0.9em">${item.ItemDescription}</em> 
                     <span style="float: right; font-size: 0.9em; margin-top: 0.1em">Quantity: ${item.ItemQuantity}</span>
                 </div>
             </div>

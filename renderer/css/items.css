@@ -25,11 +25,12 @@
     grid-template-columns: 30% 70%;
     text-align: left;
 }
-
 .menuDiv > div * {
     margin-top: 1em;
 }
-
-#addItemBtn {
+.menuDiv h3 {
+    text-align: center;
+}
+.menuDiv button {
     margin-top: 2em;
 }

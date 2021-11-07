@@ -22,7 +22,7 @@
 
     <section id="newItemContainer" class="menuContainer" style="display: none;">
         <div id="newItemDiv" class="menuDiv">
-            <h3 style="text-align: center;">New Item</h3>
+            <h3>New Item</h3>
 
             <div>
                 <label for="itemNameInput">Item Name:</label>
@@ -36,6 +36,28 @@
             </div>
 
             <button id="addItemBtn">Add Item</button>
+        </div>
+    </section>
+
+    <section id="editItemContainer" class="menuContainer" style="display: none;">
+        <div id="editItemDiv" class="menuDiv">
+            <h3>Edit Item</h3>
+
+            <div>
+                <label for="itemIdDisplay">Item ID:</label>
+                <input type="number" disabled id="itemIdDisplay">
+
+                <label for="editItemName">Item Name:</label>
+                <input type="text" id="editItemName">
+
+                <label for="editItemDescription">Item Description:</label>
+                <textarea id="editItemDescription" cols="20" rows="3" placeholder="Optional"></textarea>
+
+                <label for="editItemQuantity">Item Quantity:</label>
+                <input type="number" id="editItemQuantity">
+            </div>
+
+            <button id="saveItemBtn">Save Changes</button>
         </div>
     </section>
 
