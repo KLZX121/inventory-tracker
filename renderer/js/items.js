@@ -54,7 +54,7 @@ newItemContainer.addEventListener('keydown', event => {
 addItemBtn.addEventListener('click', addNewItem);
 function addNewItem(){
     if (!itemNameInput.value.trim() || !itemQuantity.value || !itemCode.value.trim()) {
-        dialog.showMessageBox({message: 'Please fill in all required fields', type: 'error', title: 'Error'});
+        dialog.showErrorBox('Please fill in all required fields');
         return;
     }
     try {
@@ -65,7 +65,7 @@ function addNewItem(){
             itemQuantity: parseInt(itemQuantity.value)
         });
     } catch (e) {
-        dialog.showMessageBox({message: e.toString(), type: 'error', title: 'Error'});
+        dialog.showErrorBox(e.toString());
         return;
     }
     newItemContainer.style.display = 'none';
@@ -87,7 +87,7 @@ editItemContainer.addEventListener('keydown', event => {
 saveItemBtn.addEventListener('click', editItem);
 function editItem(){
     if (!editItemName.value.trim() || !editItemQuantity.value || !editItemCode.value.trim()) {
-        dialog.showMessageBox({message: 'Please fill in all required fields', type: 'error', title: 'Error'});
+        dialog.showErrorBox('Please fill in all required fields');
         return;
     }
     try {
@@ -99,7 +99,7 @@ function editItem(){
             itemQuantity: parseInt(editItemQuantity.value)
         });
     } catch (e) {
-        dialog.showMessageBox({message: e.toString(), type: 'error', title: 'Error'});
+        dialog.showErrorBox(e.toString());
         return;
     }
     editItemContainer.style.display = 'none';

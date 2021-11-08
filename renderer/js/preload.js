@@ -129,8 +129,8 @@ contextBridge.exposeInMainWorld(
     //expose electron dialog
     'dialog',
     {
-        showMessageBox: options => {
-            ipcRenderer.send('dialog', {type: 'showMessageBox', options});
+        showErrorBox: content => {
+            ipcRenderer.send('dialog', {type: 'showErrorBox', content});
         }
     }
 );

@@ -54,8 +54,8 @@ function bootApp(){
     });
     ipcMain.on('dialog', (event, obj) => {
         switch (obj.type){
-            case 'showMessageBox':
-                dialog.showMessageBox(obj.options);
+            case 'showErrorBox':
+                dialog.showErrorBox('Error', obj.content);
                 break;
         }
     });
