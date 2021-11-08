@@ -14,8 +14,7 @@ const newItemBtn = g('newItemBtn'),
     editItemQuantity = g('editItemQuantity'),
     saveItemBtn = g('saveItemBtn'),
     itemIdDisplay = g('itemIdDisplay'),
-    itemSearch = g('itemSearch'),
-    itemSearchBtn = g('itemSearchBtn');
+    itemSearch = g('itemSearch');
 
 //get database name from data sent by databases page
 const databaseName = new URLSearchParams(location.search).get('db');
@@ -112,12 +111,12 @@ function openItem(event, itemId){
 }
 
 //search items
-itemSearchBtn.addEventListener('click', searchItems);
 itemSearch.addEventListener('keydown', event => {
     if (event.code === 'Enter') searchItems();
 });
 itemSearch.addEventListener('input', () => {
     if (!itemSearch.value) refreshItemList();
+    else searchItems();
 });
 function searchItems() {
     const searchTerm = itemSearch.value.trim().toLowerCase();
@@ -129,6 +128,7 @@ function searchItems() {
     });
 }
 
+//general functions
 refreshItemList();
 function refreshItemList() {
     const data = db.getAll();
@@ -143,7 +143,7 @@ function createItemList(item){
             <strong>${item.ItemName}</strong>
             <button class="actionBtn" onclick="deleteItem('${item.ItemID}')">Delete</button>
             <div>
-                <em style="font-size: 0.9em">${item.ItemDescription}</em> 
+                <em style="font-size: 0.9em">${item.ItemDescription || '&nbsp'}</em> 
                 <span style="float: right; font-size: 0.9em; margin-top: 0.1em">Quantity: ${item.ItemQuantity}</span>
             </div>
         </div>
