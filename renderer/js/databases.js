@@ -24,6 +24,8 @@ function refreshDbList(){
             </div>
         `;
     }
+
+    if (databaseList.children.length === 0) databaseList.innerHTML += `<div class="emptyPlaceholder">No databases</div`;
 }
 function openDb(event, database){
     if (event.target.tagName !== 'BUTTON') location.href = `../html/items.html?db=${database}`;

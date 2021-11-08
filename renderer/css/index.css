@@ -105,3 +105,10 @@ button {
 .menuDiv button {
     margin-top: 2em;
 }
+
+.emptyPlaceholder {
+    text-align: center;
+    font-style: italic;
+    color: grey;
+    margin-top: 1em;
+}

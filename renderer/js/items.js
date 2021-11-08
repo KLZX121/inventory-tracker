@@ -154,6 +154,9 @@ function refreshItemList() {
     itemList.innerHTML = '';
 
     data.forEach(createItemList);
+
+    if (itemList.children.length === 0) itemList.innerHTML += `<div class="emptyPlaceholder">No items</div`;
+
 }
 function createItemList(item){
     itemList.innerHTML += ` 
