@@ -44,7 +44,8 @@ button {
 
 .container {
     margin: 3em;
-    border: 2px black solid;
+    border: 0.3em solid;
+    border-image: linear-gradient(135deg, #eecda3, #ef629f) 1;
     height: 70%;
     padding: 1em;
     overflow: auto;
