@@ -16,9 +16,9 @@ function refreshDbList(){
         databaseList.innerHTML += `
             <div class="listItem dbItem" onclick="openDb(event, '${database}')">
                 <strong>${database}</strong>
-                <span class="dbType ${databases[database].type == 'local' ? 'local' : 'remote'}">${databases[database].type}</span>
                 <button class="actionBtn" onclick="deleteDb(\`${database}\`)">Delete</button>
                 <div>
+                    <span class="dbType ${databases[database].type == 'local' ? 'local' : 'remote'}">${databases[database].type}</span>
                     ${databases[database].type == 'local' ? `<span class="dbVisibility">${databases[database].visibility}</span>` : ''}
                 </div>
             </div>

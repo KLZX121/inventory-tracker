@@ -1,8 +1,8 @@
 .dbType {
     text-transform: capitalize;
-    font-weight: bold;
-    margin-left: 0.5em;
     font-size: 0.9em;
+    padding-left: 0.5em;
+    border-left: 1px solid lightgrey;
 }
 .dbVisibility {
     text-transform: capitalize;

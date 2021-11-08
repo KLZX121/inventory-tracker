@@ -61,7 +61,7 @@ button {
     border-bottom: 1px solid black;
 }
 .listItem:hover {
-    background-color: lightgrey;
+    background-color: #f1f1f1;
     cursor: pointer;
 }
 
