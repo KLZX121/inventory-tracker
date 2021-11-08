@@ -9,13 +9,31 @@
     <h1 class="pageTitle">Databases</h1>
 
     <section class="container">
-        <input type="text" placeholder="Database name" id="dbName" spellcheck="false">
         <button id="newDatabaseBtn">New Database</button>
         <div id="databaseList" class="list">
             
         </div>
     </section>
     
+    <section id="newDatabaseContainer" class="menuContainer" style="display: none;">
+        <div id="newDatabaseDiv" class="menuDiv">
+            <h3>New Database</h3>
+
+            <div>
+                <label for="dbName">Database Name:</label>
+                <input type="text" id="dbName" spellcheck="false">
+
+                <span>Visibility:</span>
+                <select id="dbVisibility">
+                    <option value="private">Private</option>
+                    <option value="public">Public</option>
+                </select>
+            </div>
+
+            <button id="addDatabaseBtn">Add Database</button>
+        </div>
+    </section>
+
     <script src="../js/databases.js"></script>
 </body>
 </html>

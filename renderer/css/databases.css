@@ -1,0 +1,17 @@
+.dbType {
+    text-transform: capitalize;
+    font-weight: bold;
+    margin-left: 0.5em;
+    font-size: 0.9em;
+}
+.dbVisibility {
+    text-transform: capitalize;
+    color: grey;
+    font-size: 0.8em;
+}
+.local {
+    color: dodgerblue;
+}
+.remote {
+    color: midnightblue;
+}
