@@ -15,7 +15,10 @@ const newItemBtn = g('newItemBtn'),
     saveItemBtn = g('saveItemBtn'),
     itemIdDisplay = g('itemIdDisplay'),
     itemSearch = g('itemSearch'),
-    numberOfItems = g('numberOfItems');
+    numberOfItems = g('numberOfItems'),
+    itemCode = g('itemCode'),
+    editItemCode = g('editItemCode'),
+    deleteItemBtn = g('deleteItemBtn');
 
 //get database name from data sent by databases page
 const databaseName = new URLSearchParams(location.search).get('db');
@@ -36,26 +39,30 @@ if (dbInfo.new) {
 //functions for adding new item
 newItemBtn.addEventListener('click', () => {
     newItemContainer.style.display = 'flex';
+    let id = ((db.getId()?.seq || 0) + 1).toString();
+    while (id.length < 4) id = `0${id}`;
+    itemCode.value = `BF${id}`;
     itemNameInput.focus();
-});
-newItemContainer.addEventListener('keydown', event => {
-    if (event.code === 'Enter') addNewItem();
 });
 newItemContainer.addEventListener('click', event => {
     if (event.target === newItemContainer) newItemContainer.style.display = 'none';
 });
-addItemBtn.addEventListener('click', addNewItem);
+newItemContainer.addEventListener('keydown', event => {
+    if (event.code === 'Enter') addNewItem();
+});
 
+addItemBtn.addEventListener('click', addNewItem);
 function addNewItem(){
-    if (!itemNameInput.value.trim() || !itemQuantity.value) {
+    if (!itemNameInput.value.trim() || !itemQuantity.value || !itemCode.value.trim()) {
         dialog.showMessageBox({message: 'Please fill in all required fields', type: 'error', title: 'Error'});
         return;
     }
     try {
         db.insert({
+            itemCode: itemCode.value,
             itemName: itemNameInput.value,
             itemDescription: itemDescription.value,
-            itemQuantity: itemQuantity.value
+            itemQuantity: parseInt(itemQuantity.value)
         });
     } catch (e) {
         dialog.showMessageBox({message: e.toString(), type: 'error', title: 'Error'});
@@ -63,6 +70,7 @@ function addNewItem(){
     }
     newItemContainer.style.display = 'none';
 
+    itemCode.value = '';
     itemNameInput.value = '';
     itemDescription.value = '';
     itemQuantity.value = 0;
@@ -78,13 +86,14 @@ editItemContainer.addEventListener('keydown', event => {
 });
 saveItemBtn.addEventListener('click', editItem);
 function editItem(){
-    if (!editItemName.value.trim() || !editItemQuantity.value) {
+    if (!editItemName.value.trim() || !editItemQuantity.value || !editItemCode.value.trim()) {
         dialog.showMessageBox({message: 'Please fill in all required fields', type: 'error', title: 'Error'});
         return;
     }
     try {
         db.update({
-            itemId: parseInt(itemIdDisplay.value),
+            itemId: itemIdDisplay.value,
+            itemCode: editItemCode.value,
             itemName: editItemName.value,
             itemDescription: editItemDescription.value,
             itemQuantity: parseInt(editItemQuantity.value)
@@ -104,11 +113,18 @@ function openItem(event, itemId){
     const itemData = db.get(itemId);
     
     itemIdDisplay.value = itemId;
+    editItemCode.value = itemData.ItemCode;
     editItemName.value = itemData.ItemName;
     editItemDescription.value = itemData.ItemDescription;
     editItemQuantity.value = itemData.ItemQuantity;
 
     editItemName.focus();
+}
+deleteItemBtn.addEventListener('click', deleteItem);
+function deleteItem(){
+    db.deleteItem(itemIdDisplay.value);
+    refreshItemList();
+    editItemContainer.style.display = 'none';
 }
 
 //search items
@@ -142,19 +158,14 @@ function refreshItemList() {
 function createItemList(item){
     itemList.innerHTML += ` 
         <div class="listItem" onclick="openItem(event, ${item.ItemID})">
-            <span>${item.ItemID}</span> | 
+            <span class="itemCodeListDisplay">${item.ItemCode}</span> | 
             <strong>${item.ItemName}</strong>
-            <button class="actionBtn" onclick="deleteItem('${item.ItemID}')">Delete</button>
+            <span class="itemQuantity">Quantity: ${item.ItemQuantity}</span>
             <div>
-                <em style="font-size: 0.9em">${item.ItemDescription || '&nbsp'}</em> 
-                <span style="float: right; font-size: 0.9em; margin-top: 0.1em">Quantity: ${item.ItemQuantity}</span>
+                <em class="itemDescription">${item.ItemDescription}</em> 
             </div>
         </div>
     `;
     const description = document.querySelector(`[onclick="openItem(event, ${item.ItemID})"] em`);
-    if (description.offsetWidth > 450) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * 450))}...`;
-}
-function deleteItem(itemId){
-    db.deleteItem(itemId);
-    refreshItemList();
+    if (description.offsetWidth > (window.innerWidth - 350)) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * (window.innerWidth - 350)))}...`;
 }

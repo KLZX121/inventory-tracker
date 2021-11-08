@@ -1,0 +1,13 @@
+.itemCodeListDisplay {
+    font-family: Consolas, monospace;
+}
+.itemDescription {
+    white-space: nowrap;
+    font-size: 0.9em;
+    color: grey;
+}
+.itemQuantity {
+    float: right;
+    font-size: 0.9em;
+    color: green;
+}

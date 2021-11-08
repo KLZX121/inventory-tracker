@@ -45,6 +45,7 @@ contextBridge.exposeInMainWorld(
             const stmt = this.db.prepare(`
                 CREATE TABLE items (
                     ItemID INTEGER PRIMARY KEY AUTOINCREMENT,
+                    ItemCode TEXT UNIQUE NOT NULL,
                     ItemName TEXT UNIQUE NOT NULL,
                     ItemDescription TEXT,
                     ItemQuantity INTEGER
@@ -73,10 +74,16 @@ contextBridge.exposeInMainWorld(
             const data = stmt.all();
             return data;
         },
+        getId: () => {
+            const stmt = this.db.prepare("SELECT seq FROM SQLITE_SEQUENCE WHERE name='items'");
+
+            const data = stmt.get();
+            return data;
+        },
         insert: values => {
             const stmt = this.db.prepare(`
-                INSERT INTO items
-                VALUES (NULL, '${values.itemName}', '${values.itemDescription}', ${values.itemQuantity})
+                INSERT INTO items (ItemID, ItemCode, ItemName, ItemDescription, ItemQuantity)
+                VALUES (NULL, '${values.itemCode}', '${values.itemName}', '${values.itemDescription}', ${values.itemQuantity})
             `);
 
             const info = stmt.run();
@@ -85,7 +92,8 @@ contextBridge.exposeInMainWorld(
         update: item => {
             const stmt = this.db.prepare(`
                 UPDATE items
-                SET ItemName = '${item.itemName}',
+                SET ItemCode = '${item.itemCode}',
+                    ItemName = '${item.itemName}',
                     ItemDescription = '${item.itemDescription}',
                     ItemQuantity = ${item.itemQuantity}
                 WHERE ItemID = ${item.itemId}
