@@ -14,7 +14,8 @@ const newItemBtn = g('newItemBtn'),
     editItemQuantity = g('editItemQuantity'),
     saveItemBtn = g('saveItemBtn'),
     itemIdDisplay = g('itemIdDisplay'),
-    itemSearch = g('itemSearch');
+    itemSearch = g('itemSearch'),
+    numberOfItems = g('numberOfItems');
 
 //get database name from data sent by databases page
 const databaseName = new URLSearchParams(location.search).get('db');
@@ -132,6 +133,8 @@ function searchItems() {
 refreshItemList();
 function refreshItemList() {
     const data = db.getAll();
+    numberOfItems.innerText = data.length + ' items';
+
     itemList.innerHTML = '';
 
     data.forEach(createItemList);
