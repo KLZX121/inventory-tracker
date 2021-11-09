@@ -223,6 +223,7 @@ function createItemList(item){
     if (description.offsetWidth > (window.innerWidth - 350)) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * (window.innerWidth - 350)))}...`;
     const quantity = document.querySelector(`.id${item.ItemID} .itemQuantity`);
     if (item.ItemQuantity <= item.ItemMinQuantity) {
+        new Notification('Inventory Tracker', { body: `${item.ItemName} is low on stock!`});
         quantity.classList.add('red');
         quantity.classList.remove('green');
     } else {
