@@ -9,7 +9,8 @@
     <h1 class="pageTitle">Databases</h1>
 
     <section class="container">
-        <button id="newDatabaseBtn">New Database</button>
+        <button id="newDatabaseBtn">New Local Database</button>
+        <button id="newRemoteDbBtn">Add Remote Database</button>
         <div id="databaseList" class="list">
             
         </div>
@@ -31,6 +32,17 @@
             </div>
 
             <button id="addDatabaseBtn">Add Database</button>
+        </div>
+    </section>
+
+    <section id="newRemoteDbContainer" class="menuContainer" style="display: none;">
+        <div id="newRemoteDbDiv" class="menuDiv">
+            <h3>Add Remote Database</h3>
+
+            <span id="searchingSpan" style="display: none;">Searching...</span>
+            <div id="remoteDatabasesList">
+                
+            </div>
         </div>
     </section>
 

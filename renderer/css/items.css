@@ -11,3 +11,23 @@
     font-size: 0.9em;
     color: green;
 }
+#onlineStatus {
+    cursor: pointer;
+    font-weight: bold;
+}
+#onlineStatusDiv, #remoteDiv, #connectingDiv {
+    text-align: center;
+}
+.offline {
+    color: red;
+}
+.online {
+    color: green;
+}
+#remoteSpan {
+    color: midnightblue;
+}
+#connectingDiv {
+    margin-top: 5em;
+    color: grey;
+}

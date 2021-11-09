@@ -1,6 +1,9 @@
 const { contextBridge, ipcRenderer } = require('electron');
 const Database = require('better-sqlite3');
 const fs = require('fs');
+const network = require('./network.js');
+const http = require('http');
+const WS = require('ws');
 
 contextBridge.exposeInMainWorld(
     //allows renderer process (index.js) to access electron api through window.app
@@ -131,6 +134,92 @@ contextBridge.exposeInMainWorld(
     {
         showErrorBox: content => {
             ipcRenderer.send('dialog', {type: 'showErrorBox', content});
+        }
+    }
+);
+contextBridge.exposeInMainWorld(
+    //expose networks
+    'network',
+    {
+        networkSearch: network.networkSearch
+    }
+);
+contextBridge.exposeInMainWorld(
+    //expose ws
+    'ws',
+    {
+        httpServer: null,
+        wss: null,
+        clientWs: null,
+        isOnline: () => {
+            return this.httpServer?.listening;
+        },
+        host: (info, getAll) => {
+            this.httpServer = http.createServer((req, res) => res.end(info));
+            this.httpServer.on('error', error => {
+                this.httpServer.close();
+                ipcRenderer.send('dialog', {type: 'showErrorBox', content: error.toString()});
+            });
+            this.httpServer.listen(1210, network.getIpSubnet().ip, () => {
+                this.wss = new WS.Server({
+                    server: this.httpServer,
+                    clientTracking: true
+                });
+                this.wss.on('error', error => {
+                    ipcRenderer.send('dialog', {type: 'showErrorBox', content: error.toString()});
+                });
+                this.wss.on('close', () => this.httpServer.close());
+                this.wss.on('connection', (ws, request) => {
+                    ws.on('message', message => {
+                        if (message.toString() === 'sync') {
+                            getAll().forEach(item => {
+                                ws.send(JSON.stringify(item));
+                            });
+                            ws.send('end');
+                        }
+                    });
+                });
+            });
+        },
+        closeServer: () => {
+            this.wss.close();
+            this.httpServer.close();
+        },
+        requestName: (address, callback) => {
+            const req = http.request({hostname: address, port: 1210, method: 'GET'}, res => { //sends a request to the database for the database name
+                res.on('data', callback);
+            });
+            req.on('error', error => {
+                dialog.showErrorBox(`There was an error making a request: ${error}`);
+            });
+            req.end();
+        },
+        connect: ip => {
+            return new Promise((resolve, reject) => {
+                this.clientWs = new WS(`ws://${ip}:${1210}`);
+
+                let timeout = setTimeout(() => {
+                    this.clientWs.close();
+                }, 10000); 
+                this.clientWs.on('error', error => {
+                    console.error(error);
+                    ipcRenderer.send('dialog', {type: 'showErrorBox', content: 'Cannot connect to database'});
+                    location.href = '../html/databases.html';
+                });
+                this.clientWs.on('close', () => {
+                    location.href = '../html/databases.html';
+                });
+                this.clientWs.on('open', () => {
+                    clearTimeout(timeout);
+                    resolve();
+                });
+            });
+        },
+        initialise: callback => {
+            this.clientWs.on('message', callback);
+        },
+        sync: () => {
+            this.clientWs.send('sync');
         }
     }
 );

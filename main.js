@@ -20,9 +20,7 @@ function bootApp(){
             preload: path.join(__dirname, './renderer/js/preload.js')
         }
     });
-
     win.loadFile('./renderer/html/home.html');
-
     win.on('ready-to-show', () => win.show());
     win.webContents.openDevTools();
 

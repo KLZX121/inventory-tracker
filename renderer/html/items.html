@@ -9,10 +9,15 @@
     <button onclick="window.location.href = './databases.html'" id="backToDatabasesBtn">Databases</button>
 
     <h1 class="pageTitle">Databases</h1>
+    <div id="onlineStatusDiv" style="display: none;"><span id="onlineStatus" class="offline">Offline</span></div>
+    <div id="remoteDiv" style="display: none;"><span id="remoteSpan">Remote</span></div>
+
+    <div id="connectingDiv" style="display: none;"><span id="connectingSpan">Connecting...</span></div>
 
     <section class="container">
         <input type="text" id="itemSearch" placeholder="Search items">
         <button id="newItemBtn">New item</button>
+        <button id="syncBtn" style="display: none;">Sync</button>
         <span id="numberOfItems" style="float: right;"></span>
 
         <div id="itemList" class="list">

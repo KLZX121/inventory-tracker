@@ -15,3 +15,21 @@
 .remote {
     color: midnightblue;
 }
+.remoteDbListItem {
+    border-bottom: 1px solid black;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+.remoteDbListItem:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+.remoteDbName {
+    font-weight: bold;
+}
+.remoteDbIp {
+    color: grey;
+}
+#newRemoteDbDiv > div {
+    display: block;
+}
