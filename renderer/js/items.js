@@ -23,7 +23,9 @@ const newItemBtn = g('newItemBtn'),
     onlineStatusDiv = g('onlineStatusDiv'),
     remoteDiv = g('remoteDiv'),
     connectingDiv = g('connectingDiv'),
-    syncBtn = g('syncBtn');
+    syncBtn = g('syncBtn'),
+    itemMinQuantity = g('itemMinQuantity'),
+    editItemMinQuantity = g('editItemMinQuantity');
 
 //get database name from data sent by databases page
 const searchParams = new URLSearchParams(location.search);
@@ -91,7 +93,8 @@ if (searchParams.get('remote') === 'false') {
                 itemCode: itemCode.value,
                 itemName: itemNameInput.value,
                 itemDescription: itemDescription.value,
-                itemQuantity: parseInt(itemQuantity.value)
+                itemQuantity: parseInt(itemQuantity.value),
+                itemMinQuantity: parseInt(itemMinQuantity.value)
             });
         } catch (e) {
             dialog.showErrorBox(e.toString());
@@ -103,6 +106,7 @@ if (searchParams.get('remote') === 'false') {
         itemNameInput.value = '';
         itemDescription.value = '';
         itemQuantity.value = 0;
+        itemMinQuantity.value = 0;
         refreshItemList();
     }
 
@@ -125,7 +129,8 @@ if (searchParams.get('remote') === 'false') {
                 itemCode: editItemCode.value,
                 itemName: editItemName.value,
                 itemDescription: editItemDescription.value,
-                itemQuantity: parseInt(editItemQuantity.value)
+                itemQuantity: parseInt(editItemQuantity.value),
+                itemMinQuantity: parseInt(editItemMinQuantity.value)
             });
         } catch (e) {
             dialog.showErrorBox(e.toString());
@@ -216,6 +221,14 @@ function createItemList(item){
     `;
     const description = document.querySelector(`.id${item.ItemID} em`);
     if (description.offsetWidth > (window.innerWidth - 350)) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * (window.innerWidth - 350)))}...`;
+    const quantity = document.querySelector(`.id${item.ItemID} .itemQuantity`);
+    if (item.ItemQuantity <= item.ItemMinQuantity) {
+        quantity.classList.add('red');
+        quantity.classList.remove('green');
+    } else {
+        quantity.classList.add('green');
+        quantity.classList.remove('red');
+    }
 }
 function createRemoteItemList(item){
     itemList.innerHTML += ` 
@@ -230,6 +243,13 @@ function createRemoteItemList(item){
     `;
     const description = document.querySelector(`.id${item.ItemID} em`);
     if (description.offsetWidth > (window.innerWidth - 350)) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * (window.innerWidth - 350)))}...`;
+    if (item.ItemQuantity <= item.ItemMinQuantity) {
+        quantity.classList.add('red');
+        quantity.classList.remove('green');
+    } else {
+        quantity.classList.add('green');
+        quantity.classList.remove('red');
+    }
 }
 function openItem(event, itemId){
     if (event.target.tagName === 'BUTTON') return;
@@ -242,6 +262,7 @@ function openItem(event, itemId){
     editItemName.value = itemData.ItemName;
     editItemDescription.value = itemData.ItemDescription;
     editItemQuantity.value = itemData.ItemQuantity;
+    editItemMinQuantity.value = itemData.ItemMinQuantity;
 
     editItemName.focus();
 }

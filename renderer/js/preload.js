@@ -51,7 +51,8 @@ contextBridge.exposeInMainWorld(
                     ItemCode TEXT UNIQUE NOT NULL,
                     ItemName TEXT UNIQUE NOT NULL,
                     ItemDescription TEXT,
-                    ItemQuantity INTEGER
+                    ItemQuantity INTEGER,
+                    ItemMinQuantity INTEGER
                 )
             `);
 
@@ -85,8 +86,8 @@ contextBridge.exposeInMainWorld(
         },
         insert: values => {
             const stmt = this.db.prepare(`
-                INSERT INTO items (ItemID, ItemCode, ItemName, ItemDescription, ItemQuantity)
-                VALUES (NULL, '${values.itemCode}', '${values.itemName}', '${values.itemDescription}', ${values.itemQuantity})
+                INSERT INTO items (ItemID, ItemCode, ItemName, ItemDescription, ItemQuantity, ItemMinQuantity)
+                VALUES (NULL, '${values.itemCode}', '${values.itemName}', '${values.itemDescription}', ${values.itemQuantity}, ${values.itemMinQuantity})
             `);
 
             const info = stmt.run();
@@ -98,7 +99,8 @@ contextBridge.exposeInMainWorld(
                 SET ItemCode = '${item.itemCode}',
                     ItemName = '${item.itemName}',
                     ItemDescription = '${item.itemDescription}',
-                    ItemQuantity = ${item.itemQuantity}
+                    ItemQuantity = ${item.itemQuantity},
+                    ItemMinQuantity = ${item.itemMinQuantity}
                 WHERE ItemID = ${item.itemId}
             `);
 
