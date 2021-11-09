@@ -142,24 +142,6 @@ if (searchParams.get('remote') === 'false') {
         editItemContainer.style.display = 'none';
     }
 
-    //search items
-    itemSearch.addEventListener('keydown', event => {
-        if (event.code === 'Enter') searchItems();
-    });
-    itemSearch.addEventListener('input', () => {
-        if (!itemSearch.value) refreshItemList();
-        else searchItems();
-    });
-    function searchItems() {
-        const searchTerm = itemSearch.value.trim().toLowerCase();
-        const data = db.getAll();
-        itemList.innerHTML = '';
-
-        data.forEach(item => {
-            if (item.ItemName.toLowerCase().includes(searchTerm)) createItemList(item);
-        });
-    }
-
     //general functions
     refreshItemList();
     function refreshItemList() {
@@ -176,6 +158,7 @@ if (searchParams.get('remote') === 'false') {
 } else {
     remoteDiv.style.display = 'block';
     connectingDiv.style.display = 'block';
+    itemSearch.style.display = 'none';
     document.querySelector('.container').style.display = 'none';
 
     ws.connect(searchParams.get('ip')).then(() => {
@@ -191,20 +174,52 @@ if (searchParams.get('remote') === 'false') {
         syncBtn.style.display = 'none';
         ws.sync();
     });
-    
+
     function syncData(message){
         message = new TextDecoder().decode(message);
         if (message === 'end') {
             numberOfItems.innerText = itemList.children.length + ' items';
             syncBtn.style.display = 'inline';
         } else {
-            createItemList(JSON.parse(message), true);
+            createRemoteItemList(JSON.parse(message), true);
         }
     }
 }
-function createItemList(item, remote = false){
+//search items
+itemSearch.addEventListener('keydown', event => {
+    if (event.code === 'Enter') searchItems();
+});
+itemSearch.addEventListener('input', () => {
+    if (!itemSearch.value) refreshItemList();
+    else searchItems();
+});
+function searchItems() {
+    const searchTerm = itemSearch.value.trim().toLowerCase();
+    const data = db.getAll();
+    itemList.innerHTML = '';
+
+    data.forEach(item => {
+        if (item.ItemName.toLowerCase().includes(searchTerm) || item.ItemCode.toLowerCase().includes(searchTerm)) createItemList(item);
+    });
+}
+
+function createItemList(item){
     itemList.innerHTML += ` 
-        <div class="listItem id${item.ItemID}" ${!remote ? 'onclick="openItem(event, ${item.ItemID})"' : ''}>
+        <div class="listItem id${item.ItemID}" onclick="openItem(event, ${item.ItemID})">
+            <span class="itemCodeListDisplay">${item.ItemCode}</span> | 
+            <strong>${item.ItemName}</strong>
+            <span class="itemQuantity">Quantity: ${item.ItemQuantity}</span>
+            <div>
+                <em class="itemDescription">${item.ItemDescription}</em> 
+            </div>
+        </div>
+    `;
+    const description = document.querySelector(`.id${item.ItemID} em`);
+    if (description.offsetWidth > (window.innerWidth - 350)) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * (window.innerWidth - 350)))}...`;
+}
+function createRemoteItemList(item){
+    itemList.innerHTML += ` 
+        <div class="listItem id${item.ItemID}">
             <span class="itemCodeListDisplay">${item.ItemCode}</span> | 
             <strong>${item.ItemName}</strong>
             <span class="itemQuantity">Quantity: ${item.ItemQuantity}</span>
