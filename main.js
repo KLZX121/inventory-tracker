@@ -22,7 +22,6 @@ function bootApp(){
     });
     win.loadFile('./renderer/html/home.html');
     win.on('ready-to-show', () => win.show());
-    win.webContents.openDevTools();
 
     ipcMain.on('store', (event, obj) => {
         switch (obj.type){
