@@ -37,10 +37,7 @@ function openDb(event, database, isRemote = false, ip = undefined){
 }
 function deleteDb(database) {
     store.delete(database);
-    fs.unlink(`./renderer/databases/db_${database}`, error => {
-        if (error) console.error(error);
-        refreshDbList();
-    });
+    db.delete(database, refreshDbList);
 }
 
 //add new database

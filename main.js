@@ -22,6 +22,7 @@ function bootApp(){
     });
     win.loadFile('./renderer/html/home.html');
     win.on('ready-to-show', () => win.show());
+    win.webContents.openDevTools();
 
     ipcMain.on('store', (event, obj) => {
         switch (obj.type){
@@ -54,6 +55,12 @@ function bootApp(){
             case 'showErrorBox':
                 dialog.showErrorBox('Error', obj.content);
                 break;
+        }
+    });
+    ipcMain.handle('path', (event, arg) => {
+        switch (arg){
+            case 'userData':
+                return app.getPath('userData');
         }
     });
 }

@@ -4,6 +4,7 @@ const fs = require('fs');
 const network = require('./network.js');
 const http = require('http');
 const WS = require('ws');
+const path = require('path');
 
 contextBridge.exposeInMainWorld(
     //allows renderer process (index.js) to access electron api through window.app
@@ -41,8 +42,10 @@ contextBridge.exposeInMainWorld(
     'db',
     {
         db: null,
-        openDb: name => {
-            this.db = new Database(`./renderer/databases/db_${name}`);
+        openDb: async name => {
+            const userDataPath = await ipcRenderer.invoke('path', 'userData');
+            this.db = new Database(path.join(userDataPath, `${name}.db`));
+            return;
         },
         initialise: () => {
             const stmt = this.db.prepare(`
@@ -59,9 +62,13 @@ contextBridge.exposeInMainWorld(
             const info = stmt.run();
             return info;
         },
-        delete: () => {
-            this.db.close();
+        delete: async (name, callback) => {
             this.db = null;
+            const userDataPath = await ipcRenderer.invoke('path', 'userData');
+            fs.unlink(path.join(userDataPath, `${name}.db`), error => {
+                if (error) console.error(error);
+                callback();
+            });
         },
         get: itemId => {
             const stmt = this.db.prepare(`

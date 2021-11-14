@@ -35,37 +35,40 @@ document.querySelector('.pageTitle').innerText = searchParams.get('remote') === 
 if (searchParams.get('remote') === 'false') {
 
     const dbInfo = store.get(databaseName);
-    db.openDb(databaseName);
+    (async () => {
+        await db.openDb(databaseName);
+        //setup database if it is new
+        if (dbInfo.new) {
+            db.initialise();
+            dbInfo.new = false;
+            const obj = {};
+            obj[databaseName] = dbInfo;
+            store.set(obj);
+        }
 
-    //setup database if it is new
-    if (dbInfo.new) {
-        db.initialise();
-        dbInfo.new = false;
-        const obj = {};
-        obj[databaseName] = dbInfo;
-        store.set(obj);
-    }
+        //show connection status if public database
+        if (dbInfo.visibility === 'public'){
+            onlineStatusDiv.style.display = 'block';
 
-    //show connection status if public database
-    if (dbInfo.visibility === 'public'){
-        onlineStatusDiv.style.display = 'block';
+            onlineStatus.addEventListener('click', () => {
+                if (ws.isOnline()) {
+                    //close down database
+                    ws.closeServer();
+                    onlineStatus.innerText = 'Offline';
+                    onlineStatus.classList.remove('online');
+                    onlineStatus.classList.add('offline');
+                } else {
+                    //open database
+                    ws.host(databaseName, db.getAll);
+                    onlineStatus.innerText = 'Online';
+                    onlineStatus.classList.remove('offline');
+                    onlineStatus.classList.add('online');
+                }
+            });
+        }
 
-        onlineStatus.addEventListener('click', () => {
-            if (ws.isOnline()) {
-                //close down database
-                ws.closeServer();
-                onlineStatus.innerText = 'Offline';
-                onlineStatus.classList.remove('online');
-                onlineStatus.classList.add('offline');
-            } else {
-                //open database
-                ws.host(databaseName, db.getAll);
-                onlineStatus.innerText = 'Online';
-                onlineStatus.classList.remove('offline');
-                onlineStatus.classList.add('online');
-            }
-        });
-    }
+        refreshItemList();
+    })();
 
     //functions for adding new item
     newItemBtn.addEventListener('click', () => {
@@ -148,7 +151,6 @@ if (searchParams.get('remote') === 'false') {
     }
 
     //general functions
-    refreshItemList();
     function refreshItemList() {
         const data = db.getAll();
         numberOfItems.innerText = data.length + ' items';
@@ -164,6 +166,7 @@ if (searchParams.get('remote') === 'false') {
     remoteDiv.style.display = 'block';
     connectingDiv.style.display = 'block';
     itemSearch.style.display = 'none';
+    newItemBtn.style.display = 'none';
     document.querySelector('.container').style.display = 'none';
 
     ws.connect(searchParams.get('ip')).then(() => {
@@ -216,6 +219,7 @@ function createItemList(item){
             <span class="itemQuantity">Quantity: ${item.ItemQuantity}</span>
             <div>
                 <em class="itemDescription">${item.ItemDescription}</em> 
+
             </div>
         </div>
     `;
@@ -244,6 +248,7 @@ function createRemoteItemList(item){
     `;
     const description = document.querySelector(`.id${item.ItemID} em`);
     if (description.offsetWidth > (window.innerWidth - 350)) description.innerText = `${description.innerText.slice(0, Math.ceil(description.innerText.length / description.offsetWidth * (window.innerWidth - 350)))}...`;
+    const quantity = document.querySelector(`.id${item.ItemID} .itemQuantity`);
     if (item.ItemQuantity <= item.ItemMinQuantity) {
         quantity.classList.add('red');
         quantity.classList.remove('green');
